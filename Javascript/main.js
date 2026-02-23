@@ -11,9 +11,9 @@ const showMenu = (toggleId, navId) =>{
 showMenu('nav-toggle','nav-menu')
 
 const navLink = document.querySelectorAll('.nav__link')
+const navMenu = document.getElementById('nav-menu')
 
 function linkAction(){
-    const navMenu = document.getElementById('nav-menu')
     navMenu.classList.remove('show-menu')
 }
 navLink.forEach(n => n.addEventListener('click', linkAction))
@@ -51,6 +51,16 @@ function scrollTop(){
 }
 window.addEventListener('scroll', scrollTop)
 
+if (navMenu) {
+    navMenu.classList.remove('show-menu')
+}
+
+window.addEventListener('resize', () => {
+    if (window.innerWidth >= 768 && navMenu) {
+        navMenu.classList.remove('show-menu')
+    }
+})
+
 /*==================== DARK LIGHT THEME ====================*/ 
 const themeButton = document.getElementById('theme-button')
 const darkTheme = 'dark-theme'
@@ -80,11 +90,51 @@ const sr = ScrollReveal({
     reset: true
 });
 
-sr.reveal(`.home__data, .home__img,
+sr.reveal(`.home__data, .home__img, .home__float,
             .about__data, .about__img,
             .services__content, .menu__content,
+            .testimonials__card,
             .app__data, .app__img,
             .contact__data, .contact__button,
             .footer__content`, {
     interval: 200
 })
+
+const reservationForm = document.getElementById('reservation-form')
+const reservationModal = document.getElementById('reservation-modal')
+const modalClose = document.getElementById('modal-close')
+const modalOk = document.getElementById('modal-ok')
+
+function openModal() {
+    reservationModal.classList.add('is-open')
+    reservationModal.setAttribute('aria-hidden', 'false')
+}
+
+function closeModal() {
+    reservationModal.classList.remove('is-open')
+    reservationModal.setAttribute('aria-hidden', 'true')
+}
+
+if (reservationForm) {
+    reservationForm.addEventListener('submit', (event) => {
+        event.preventDefault()
+        reservationForm.reset()
+        openModal()
+    })
+}
+
+if (modalClose) {
+    modalClose.addEventListener('click', closeModal)
+}
+
+if (modalOk) {
+    modalOk.addEventListener('click', closeModal)
+}
+
+if (reservationModal) {
+    reservationModal.addEventListener('click', (event) => {
+        if (event.target === reservationModal) {
+            closeModal()
+        }
+    })
+}
